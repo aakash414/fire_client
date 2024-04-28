@@ -1,45 +1,41 @@
-import { useEffect } from "react";
-import { messaging } from "./firebase";
-import { getToken } from "firebase/messaging";
+import React, { useEffect, useRef } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  async function requestPermission() {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      // Generate Token
-      const token = await getToken(messaging, {
-        vapidKey:
-          "BF3bywNf2U4Xr-CHZ57ayLDFkoQbEUOh-tIzQ0mfy_E8Qd7ZYJztRTVoz4tojJc9787mcrr2d50mA8X18s1ooUU",
-      });
-      console.log("Token Gen", token);
-      // Send this token  to server ( db)
-    } else if (permission === "denied") {
-      alert("You denied for the notification");
-    }
-  }
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    // Req user for notification permission
-    requestPermission();
+    const video = videoRef.current;
+
+    const handleFocus = () => {
+      video.pause();
+    };
+
+    const handleBlur = () => {
+      video.play();
+    };
+
+    const inputElement = document.querySelector("input[type='text']");
+    inputElement.addEventListener("focus", handleFocus);
+    inputElement.addEventListener("blur", handleBlur);
+
+    return () => {
+      inputElement.removeEventListener("focus", handleFocus);
+      inputElement.removeEventListener("blur", handleBlur);
+    };
   }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <video ref={videoRef} autoPlay muted loop controls>
+          <source
+            src="https://www.w3schools.com/html/mov_bbb.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <input type="text" placeholder="Type something..." />
       </header>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import iva from "./assets/video/layer3-unscreen.gif";
 
 function App() {
   const videoRef = useRef(null);
@@ -29,11 +30,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <video ref={videoRef} autoPlay muted loop controls>
-          <source
-            src="https://www.w3schools.com/html/mov_bbb.mp4"
-            type="video/mp4"
-          />
+        <video ref={videoRef} autoPlay muted poster={iva}>
+          <source src={iva} />
         </video>
         <input type="text" placeholder="Type something..." />
       </header>
